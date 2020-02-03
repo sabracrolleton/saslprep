@@ -3,4 +3,10 @@
 (defpackage :saslprep
   (:use :common-lisp)
   (:export #:normalize
-           #:parse-hex-string-to-char))
+           #:saslprep
+           #:get-mapping
+           #:get-illegal-char-list
+           #:get-canonical-combining-class-map
+           #:parse-hex-string-to-char
+           #:parse-hex-string-to-string
+           #:parse-hex-list-to-string))

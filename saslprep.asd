@@ -20,7 +20,10 @@
   ((:module "src"
             :components ((:file "package")
                          (:file "utilities" :depends-on ("package"))
-                         (:file "saslprep" :depends-on ("package" "utilities")))))
+                         (:file "precomputed-tables" :depends-on ("package" "utilities"))
+                         (:file "normalize-backend" :depends-on ("package" "utilities" "precomputed-tables"))
+                         (:file "saslprep-backend" :depends-on ("package" "utilities" "precomputed-tables"))
+                         (:file "saslprep" :depends-on ("package" "utilities" "normalize-backend" "saslprep-backend")))))
   :in-order-to ((test-op (test-op "t/tests"))))
 
 (defsystem "saslprep/tests"
