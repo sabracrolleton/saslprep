@@ -14,13 +14,10 @@
                                 (asdf:system-source-directory (asdf:find-system 'saslprep nil))))
 
 (defun read-test-data (fname)
-  (with-open-file (in (uiop:merge-pathnames* saslprep::*test-directory* fname))
+  (with-open-file (in (uiop:merge-pathnames* *test-directory* fname))
     (loop for line = (read-line in nil nil)
        while line
        collect (cl-ppcre:split ";" line))))
-
-(loop for x in (read-test-data "test-part1-fails.txt") do
-     (format t "Fourth ~a first ~a second ~a third ~a fifth ~a~%" (fourth x) (first x) (second x) (third x) (fifth x)))
 
 (test part0-nfkc
   (loop for x in (read-test-data "test-part0.txt") do

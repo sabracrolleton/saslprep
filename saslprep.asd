@@ -27,7 +27,7 @@
   :in-order-to ((test-op (test-op "t/tests"))))
 
 (defsystem "saslprep/tests"
-  :depends-on ("saslprep" "fiveam")
+  :depends-on ("saslprep" "fiveam" "uiop" "cl-ppcre" "split-sequence")
   :components
   ((:module "t"
             :components ((:file "test-package")
