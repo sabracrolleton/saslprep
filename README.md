@@ -1,5 +1,7 @@
 # saslprep
 
+Warning - Alpha level software. Normalize is not optimized and Saslprep is not complete
+
 This package provides a common lisp unicode normalization function using nfc, nfd, nfkc and nfkd as per Unicode Standard Annex #15 found at http://www.unicode.org/reports/tr15/tr15-22.html as well as saslprep and stringprep functions required by  https://tools.ietf.org/html/rfc5802as and
 found in:
 
@@ -32,32 +34,26 @@ Example with reference to relevant xkcd https://www.xkcd.com/936/
 ```
 
 # Saslprep Process
-## Map non-ascii space characters to space #x0020
-## Map commonly mapped to nothing
-## KC Normalization as described in Stringprep 4
-## check for prohibited input characters
-### ascii control characters (stringprep c.2.1)
-### non-ascii control characters (stringprep c.2.2)
-### private use characters (stringprep c.3)
-
-### non-character code points (stringprep c.4)
-### surrogate code points (stringprep c.5)
-### inappropriate for plain text characters (stringprep c.6)
-
-### Inappropriate for canonical representation characters (StringPrep, C.7)
-
-### Change display properties or deprecated characters (StringPrep, C.8)
-
-### Tagging characters (StringPrep, C.9)
-
-## Check for bidirectional strings (stringprep Section 6)
-
-## Unassigned code points
+  * Map non-ascii space characters to space #x0020
+  * Map commonly mapped to nothing
+  * KC Normalization as described in Stringprep 4
+  * check for prohibited input characters
+  * ascii control characters (stringprep c.2.1)
+  * non-ascii control characters (stringprep c.2.2)
+  * private use characters (stringprep c.3)
+  * non-character code points (stringprep c.4)
+  * surrogate code points (stringprep c.5)
+  * inappropriate for plain text characters (stringprep c.6)
+  * Inappropriate for canonical representation characters (StringPrep, C.7)
+  * Change display properties or deprecated characters (StringPrep, C.8)
+  * Tagging characters (StringPrep, C.9)
+  * Check for bidirectional strings (stringprep Section 6)
+  * Unassigned code points
 
 
 # To Do list
-## Case folding is not the same as normalization.
-## All the things I do not understand yet
+  * Case folding is not the same as normalization.
+  * All the things I do not understand yet
 
 # Data Files
 UnicodeData.txt was downloaded from http://www.unicode.org/Public/UNIDATA/UnicodeData.txt
