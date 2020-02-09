@@ -61,13 +61,12 @@
    *canonical-decomp-map*)
   (defparameter *canonical-comp-map* canonical-comp-map))
 
-
 (defun get-chars-mapped-to-nothing (&optional (form :char))
   "Returns a list of characters commonly mapped to nothing per RFC 3454. Default returns a list of charactershex strings. This can be changed
 by passing in an optional parameter of either :hex-string (returning a list of strings of the hexadecimal representation of the code-point),
  :hex (an integer represented in hex) or :code-points (which will return a list of decimals representing the code-points)."
   (cond ((eq form :char)
-         '(#\Soft_Hyphen #\U+1806 #\Zero_Width_Space #\U+2060 #\U+FEFF #\Combining_Grapheme_Joiner #\U+180B #\U+180C #\U+180D #\U+200C #\U+200D #\U+FE00 #\U+FE01 #\U+FE02 #\U+FE03 #\U+FE04 #\U+FE05 #\U+FE06 #\U+FE07 #\U+FE08 #\U+FE09 #\U+FE0A #\U+FE0B #\U+FE0C #\U+FE0D #\U+FE0E #\U+FE0F))
+         (loop for x in '(#x00AD #x1806 #x200B #x2060 #xFEFF #x034F #x180B #x180C #x180D #x200C #x200D #xFE00 #xFE01 #xFE02 #xFE03 #xFE04 #xFE05 #xFE06 #xFE07 #xFE08 #xFE09 #xFE0A #xFE0B #xFE0C #xFE0D #xFE0E #xFE0F) collect (code-char x)))
         ((eq form :hex-string)
          '("00AD" "1806" "200B" "2060" "FEFF" "034F" "180B" "180C" "180D" "200C" "200D" "FE00" "FE01" "FE02" "FE03" "FE04" "FE05" "FE06" "FE07" "FE08" "FE09" "FE0A" "FE0B" "FE0C" "FE0D" "FE0E" "FE0F"))
         ((eq form :hex)
@@ -85,7 +84,8 @@ by passing in an optional parameter of either :hex-string (returning a list of s
 by passing in an optional parameter of either :hex-string (returning a list of strings of the hexadecimal representation of the code-point),
  :hex (an integer represented in hex) or :code-points (which will return a list of decimals representing the code-points)."
   (cond ((eq form :char)
-         '(#\No-Break_Space #\U+1680 #\U+2000 #\U+2001 #\U+2002 #\U+2003 #\U+2004 #\U+2005 #\U+2006 #\Figure_Space #\U+2008 #\U+2009 #\U+200A #\Zero_Width_Space #\U+202F #\U+205F #\U+3000))
+         (loop for x in '(#x00A0 #x1680 #x2000 #x2001 #x2002 #x2003 #x2004 #x2005 #x2006 #x2007 #x2008 #x2009 #x200A #x200B #x202F #x205F #x3000)
+              collect (code-char x)))
         ((eq form :hex-string)
          '("00A0" "1680" "2000" "2001" "2002" "2003" "2004" "2005" "2006" "2007" "2008" "2009" "200A" "200B" "202F" "205F" "3000"))
         ((eq form :hex)
@@ -99,7 +99,8 @@ by passing in an optional parameter of either :hex-string (returning a list of s
 by passing in an optional parameter of either :hex-string (returning a list of strings of the hexadecimal representation of the code-point),
  :hex (an integer represented in hex) or :code-points (which will return a list of decimals representing the code-points)."
   (cond ((eq form :char)
-         '(#\Null #\SOH #\STX #\ETX #\EOT #\ENQ #\ACK #\Bell #\Backspace #\Tab #\Newline #\Vt #\Page #\Return #\SO #\SI #\Dle #\Dc1 #\Dc2 #\Dc3 #\Dc4 #\Nak #\Syn #\Etb #\Can #\Em #\Sub #\ESC #\Fs #\Gs #\Rs #\Us #\Rubout))
+         (loop for x in '(#x0 #x1 #x2 #x3 #x4 #x5 #x6 #x7 #x8 #x9 #xA #xB #xC #xD #xE #xF #x10 #x11 #x12 #x13 #x14 #x15 #x16 #x17 #x18 #x19 #x1A #x1B #x1C #x1D #x1E #x1F #x7F)
+              collect (code-char x)))
         ((eq form :hex-string)
          '("0" "1" "2" "3" "4" "5" "6" "7" "8" "9" "A" "B" "C" "D" "E" "F" "10" "11" "12" "13" "14" "15" "16" "17" "18" "19" "1A" "1B" "1C" "1D" "1E" "1F" "7F"))
         ((eq form :hex)
@@ -113,7 +114,8 @@ by passing in an optional parameter of either :hex-string (returning a list of s
 by passing in an optional parameter of either :hex-string (returning a list of strings of the hexadecimal representation of the code-point),
  :hex (an integer represented in hex) or :code-points (which will return a list of decimals representing the code-points)."
   (cond ((eq form :char)
-         '(#\U+0080 #\U+0081 #\U+0082 #\U+0083 #\U+0084 #\U+0085 #\U+0086 #\U+0087 #\U+0088 #\U+0089 #\U+008A #\U+008B #\U+008C #\U+008D #\U+008E #\U+008F #\U+0090 #\U+0091 #\U+0092 #\U+0093 #\U+0094 #\U+0095 #\U+0096 #\U+0097 #\U+0098 #\U+0099 #\U+009A #\U+009B #\U+009C #\U+009D #\U+009E #\U+009F #\Arabic_End_Of_Ayah #\Syriac_Abbreviation_Mark #\U+180E #\U+200C #\U+200D #\Line_Separator #\Paragraph_Separator #\U+2060 #\U+2061 #\U+2062 #\U+2063 #\U+206A #\U+206B #\U+206C #\U+206D #\U+206E #\U+206F #\U+FEFF #\U+FFF9 #\U+FFFA #\U+FFFB #\U+FFFC #\U+1D173 #\U+1D174 #\U+1D175 #\U+1D176 #\U+1D177 #\U+1D178 #\U+1D179 #\U+1D17A))
+         (loop for x in '(#x80 #x81 #x82 #x83 #x84 #x85 #x86 #x87 #x88 #x89 #x8A #x8B #x8C #x8D #x8E #x8F #x90 #x91 #x92 #x93 #x94 #x95 #x96 #x97 #x98 #x99 #x9A #x9B #x9C #x9D #x9E #x9F #x06DD #x070F #x180E #x200C #x200D #x2028 #x2029 #x2060 #x2061 #x2062 #x2063 #x206A #x206B #x206C #x206D #x206E #x206F #xFEFF #xFFF9 #xFFFA #xFFFB #xFFFC #x1D173 #x1D174 #x1D175 #x1D176 #x1D177 #x1D178 #x1D179 #x1D17A)
+              collect (code-char x)))
         ((eq form :hex-string)
          '("80" "81" "82" "83" "84" "85" "86" "87" "88" "89" "8A" "8B" "8C" "8D" "8E" "8F" "90" "91" "92" "93" "94" "95" "96" "97" "98" "99" "9A" "9B" "9C" "9D" "9E" "9F" "06DD" "070F" "180E" "200C" "200D" "2028" "2029" "2060" "2061" "2062" "2063" "206A" "206B" "206C" "206D" "206E" "206F" "FEFF" "FFF9" "FFFA" "FFFB" "FFFC" "1D173" "1D174""1D175" "1D176""1D177" "1D178""1D179" "1D17A"))
         ((eq form :hex)
@@ -127,7 +129,8 @@ by passing in an optional parameter of either :hex-string (returning a list of s
 by passing in an optional parameter of either :hex-string (returning a list of strings of the hexadecimal representation of the code-point),
  :hex (an integer represented in hex) or :code-points (which will return a list of decimals representing the code-points)."
   (cond ((eq form :char)
-         '(#\U+E0020 #\U+E0021 #\U+E0022 #\U+E0023 #\U+E0024 #\U+E0025 #\U+E0026 #\U+E0027 #\U+E0028 #\U+E0029 #\U+E002A #\U+E002B #\U+E002C #\U+E002D #\U+E002E #\U+E002F #\U+E0030 #\U+E0031 #\U+E0032 #\U+E0033 #\U+E0034 #\U+E0035 #\U+E0036 #\U+E0037 #\U+E0038 #\U+E0039 #\U+E003A #\U+E003B #\U+E003C #\U+E003D #\U+E003E #\U+E003F #\U+E0040 #\U+E0041 #\U+E0042 #\U+E0043 #\U+E0044 #\U+E0045 #\U+E0046 #\U+E0047 #\U+E0048 #\U+E0049 #\U+E004A #\U+E004B #\U+E004C #\U+E004D #\U+E004E #\U+E004F #\U+E0050 #\U+E0051 #\U+E0052 #\U+E0053 #\U+E0054 #\U+E0055 #\U+E0056 #\U+E0057 #\U+E0058 #\U+E0059 #\U+E005A #\U+E005B #\U+E005C #\U+E005D #\U+E005E #\U+E005F #\U+E0060 #\U+E0061 #\U+E0062 #\U+E0063 #\U+E0064 #\U+E0065 #\U+E0066 #\U+E0067 #\U+E0068 #\U+E0069 #\U+E006A #\U+E006B #\U+E006C #\U+E006D #\U+E006E #\U+E006F #\U+E0070 #\U+E0071 #\U+E0072 #\U+E0073 #\U+E0074 #\U+E0075 #\U+E0076 #\U+E0077 #\U+E0078 #\U+E0079 #\U+E007A #\U+E007B #\U+E007C #\U+E007D #\U+E007E #\U+E007F))
+         (loop for x in '(917536 917537 917538 917539 917540 917541 917542 917543 917544 917545 917546 917547 917548 917549 917550 917551 917552 917553 917554 917555 917556 917557 917558 917559 917560 917561 917562 917563 917564 917565 917566 917567 917568 917569 917570 917571 917572 917573 917574 917575 917576 917577 917578 917579 917580 917581 917582 917583 917584 917585 917586 917587 917588 917589 917590 917591 917592 917593 917594 917595 917596 917597 917598 917599 917600 917601 917602 917603 917604 917605 917606 917607 917608 917609 917610 917611 917612 917613 917614 917615 917616 917617 917618 917619 917620 917621 917622 917623 917624 917625 917626 917627 917628 917629 917630 917631)
+              collect (code-char x)))
         ((eq form :hex-string)
          '("E0020" "E0021" "E0022" "E0023" "E0024" "E0025" "E0026" "E0027" "E0028" "E0029" "E002A" "E002B" "E002C" "E002D" "E002E" "E002F" "E0030" "E0031" "E0032" "E0033" "E0034" "E0035" "E0036" "E0037" "E0038" "E0039" "E003A" "E003B" "E003C" "E003D" "E003E" "E003F" "E0040" "E0041" "E0042" "E0043" "E0044" "E0045" "E0046" "E0047" "E0048" "E0049" "E004A" "E004B" "E004C" "E004D" "E004E" "E004F" "E0050" "E0051" "E0052" "E0053" "E0054" "E0055" "E0056" "E0057" "E0058" "E0059" "E005A" "E005B" "E005C" "E005D" "E005E" "E005F" "E0060" "E0061" "E0062" "E0063" "E0064" "E0065" "E0066" "E0067" "E0068" "E0069" "E006A" "E006B" "E006C" "E006D" "E006E" "E006F" "E0070" "E0071" "E0072" "E0073" "E0074" "E0075" "E0076" "E0077" "E0078" "E0079" "E007A" "E007B" "E007C" "E007D" "E007E" "E007F"))
         ((eq form :code-points)
@@ -145,7 +148,7 @@ by passing in an optional parameter of either :hex-string (returning a list of s
 (defun get-inappropriate-for-plain-text-characters (&optional (form :char))
   "Returns a list of characters considered inappropriate for plain text characters as defined in StringPrep C.6. Default returns a list of charactershex strings. This can be changed by passing in an optional parameter of either :hex-string (returning a list of strings of the hexadecimal representation of the code-point)  or :code-points (which will return a list of decimals representing the code-points)."
   (cond ((eq form :char)
-         '(#\U+FFF9 #\U+FFFA #\U+FFFB #\U+FFFC #\Replacement_Character))
+         (loop for x in '(65529 65530 65531 65532 65533) collect (code-char x)))
         ((eq form :hex-string)
          '("FFF9" "FFFA" "FFFB" "FFFC" "FFFD"))
         ((eq form :code-points)
@@ -155,7 +158,7 @@ by passing in an optional parameter of either :hex-string (returning a list of s
 (defun get-inappropriate-for-canonical-representation-char-p (&optional (form :char))
   "Returns a list of characters considered inappropriate for canonical representation under RFC 3454 Table C.7. The parameter can be either a character, e.g. #\U+E001, a decimal code point e.g. 57345, a hex string  or an integer expressed in hex, e.g. #xE001"
   (cond ((eq form :char)
-              '(#\U+2FF0 #\U+2FF1 #\U+2FF2 #\U+2FF3 #\U+2FF4 #\U+2FF5 #\U+2FF6 #\U+2FF7 #\U+2FF8 #\U+2FF9 #\U+2FFA #\U+2FFB))
+                  (loop for x in '(12272 12273 12274 12275 12276 12277 12278 12279 12280 12281 12282 12283) collect (code-char x)))
         ((eq form :code-points)
          '(12272 12273 12274 12275 12276 12277 12278 12279 12280 12281 12282 12283))
         ((eq form :hex-string)

@@ -34,7 +34,9 @@ Example with reference to relevant xkcd https://www.xkcd.com/936/
 # Implementation Notes
 This has been tested on sbcl, ccl, ecl
 
-ABCL does not like the character #\Soft_Hyphen
+## Implementation Issues
+I have about a 5% failure rate on ABCL and Allegro
+
 Clisp failed to load split-sequence
 
 
@@ -57,7 +59,6 @@ Clisp failed to load split-sequence
 
 
 # To Do list
-  * Case folding is not the same as normalization.
   * All the things I do not understand yet
 
 # Data Files

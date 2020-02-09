@@ -2,15 +2,28 @@
 
 (in-package :saslprep)
 
-(defun char-mapped-to-nothing-p (ch &optional (hsh *mapped-to-nothing*))
+(defun char-mapped-to-nothing-p (chr)
   "Returns t if the character should be mapped to nothing per RFC 3454 Table B.1 and RFC 4013"
-  (gethash ch hsh))
+;  (gethash ch hsh)
+  (when (not (characterp chr))
+    (bad-char-error "Passing unknown type data to char-mapped-to-nothing-p" :value chr))
+  (let ((chr-code-point (char-code chr)))
+    (declare (optimize speed)
+             (integer chr-code-point))
+    (if (member chr-code-point '(#x00AD #x1806 #x200B #x2060 #xFEFF #x034F #x180B #x180C #x180D #x200C #x200D #xFE00 #xFE01 #xFE02 #xFE03 #xFE04 #xFE05 #xFE06 #xFE07 #xFE08 #xFE09 #xFE0A #xFE0B #xFE0C #xFE0D #xFE0E #xFE0F))
+        t
+        nil)))
 
 (defun char-mapped-to-space-p (chr)
   "If character is mapped to space per RFC 3454 Table C.1.2 and RFC 4013, then return t, else nil"
-  (if (member chr (get-chars-mapped-to-space) )
+  (when (not (characterp chr))
+    (bad-char-error "Passing unknown type data to char-mapped-to-space-p" :value chr))
+  (let ((chr-code-point (char-code chr)))
+    (declare (optimize speed)
+             (integer chr-code-point))
+  (if (member chr-code-point '(#x00A0 #x1680 #x2000 #x2001 #x2002 #x2003 #x2004 #x2005 #x2006 #x2007 #x2008 #x2009 #x200A #x200B #x202F #x205F #x3000))
       t
-      nil))
+      nil)))
 
 (defun non-char-code-point-p (chr)
   "Returns t if the parameter is a non-character code point as defined in RFC 3454 Table C.4. and RFC 4013"
