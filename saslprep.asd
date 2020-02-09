@@ -12,7 +12,7 @@
 (defparameter *string-file* (if *unicode* "strings-utf-8" "strings-ascii"))
 
 (defsystem "saslprep"
-  :description "Common lisp implementation of RFC 3454 (Stringprep) and 4013 (SASLprep)"
+  :description "Common lisp implementation of Unicode normalization functions :nfc, :nfd, :nfkc and :nfkd as referenced by RFC 3454 (Stringprep) and 4013 (SASLprep)"
   :author "Takeru Ohta, Sabra Crolleton <sabra.crolleton@gmail.com>"
   :license "MIT"
   :depends-on ("split-sequence" "cl-ppcre" "uiop")

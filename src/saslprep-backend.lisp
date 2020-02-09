@@ -131,10 +131,7 @@
         nil)))
 
 (defun private-use-char-p (chr)
-  "Returns t if chr is a code-point within the private range E000-F8FF; [PRIVATE USE, PLANE 0]
-   F0000-FFFFD; [PRIVATE USE, PLANE 15]
-   100000-10FFFD; [PRIVATE USE, PLANE 16]. The parameter can be either a character, e.g. #\U+E001, a decimal code point e.g. 57345 or an integer expressed
-   in hex, e.g. #xE001 as set out in RFC 3454 Table C.3 and RFC 4013"
+  "Returns t if chr is a code-point within the private range E000-F8FF; [PRIVATE USE, PLANE 0]   F0000-FFFFD; [PRIVATE USE, PLANE 15]   100000-10FFFD; [PRIVATE USE, PLANE 16]. The parameter can be either a character, e.g. #\U+E001, a decimal code point e.g. 57345 or an integer expressed in hex, e.g. #xE001 as set out in RFC 3454 Table C.3 and RFC 4013"
   (when (not (characterp chr))
     (bad-char-error "Passing unknown type data to private-use-character-p" :value chr))
   (let ((chr-code-point (char-code chr)))

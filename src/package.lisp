@@ -3,10 +3,27 @@
 (defpackage :saslprep
   (:use :common-lisp)
   (:export #:normalize
-           #:saslprep
+           #:saslprep-normalize
            #:get-mapping
            #:get-illegal-char-list
            #:get-canonical-combining-class-map
            #:parse-hex-string-to-char
            #:parse-hex-string-to-string
-           #:parse-hex-list-to-string))
+           #:parse-hex-list-to-string
+           #:char-mapped-to-nothing-p
+           #:char-mapped-to-space-p
+           #:non-char-code-point-p
+           #:non-ascii-space-char-p
+           #:ascii-control-char-p
+           #:non-ascii-control-char-p
+           #:surrogate-code-points-p
+           #:private-use-char-p
+           #:inappropriate-for-plain-text-p
+           #:inappropriate-for-canonical-representation-char-p
+           #:tagging-char-p
+           #:change-display-property-char-p
+           #:char-printable-ascii-p
+           #:string-printable-ascii-p
+           #:code-point-printable-ascii-p
+           #:char-with-bidirectional-property-R-or-AL-p
+           #:char-with-bidirectional-property-L-p))

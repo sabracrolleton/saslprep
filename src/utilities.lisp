@@ -34,8 +34,7 @@
 (defmacro nconcf (list1 list2) `(setf ,list1 (nconc ,list1 ,list2)))
 
 (defun parse-hex-string-to-string (str)
-  "Takes a string which may be one or more hex numbers e.g. '0044 0307', builds an array of characters, coerces to string and returns the string.
- Mostly used for testing."
+  "Takes a string which may be one or more hex numbers e.g. '0044 0307', builds an array of characters, coerces to string and returns the string. Mostly used for testing."
   (let* ((split-str (split-sequence:split-sequence #\Space str :remove-empty-subseqs t))
          (arry (make-array (length split-str))))
     (loop for x in split-str counting x into y do

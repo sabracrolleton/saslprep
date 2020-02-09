@@ -2,11 +2,8 @@
 
 (in-package :saslprep)
 
-
-;;;;;;;;;;;;;;;;;;;;;;;
-;;;; external functions
 (defun normalize (str normalization-form &key (rfc 3454))
-  "Base external function which calls the appropriate normalization for the normalization form."
+  "Base external function which calls the appropriate normalization for the normalization form. The default normaliation form is :nfkc, but :nfd, :nfkd and :nfc are also available."
   (if (= rfc 3454)
       (ecase normalization-form
            (:nfd  (nfd str))
@@ -84,6 +81,7 @@
                (nconcf nfd-illegal-list (parse-line nil line)))))))
 
   (defun get-illegal-char-list (normalization-form)
+    "Takes a normalization form, e.g. :nfkc and returns a list of lists of form (#\NO-BREAK_SPACE NIL) where the first item is the character name and the second item has the value N or M or nil indicating whether the character may require renormalization."
     (ecase normalization-form
       (:nfd  nfd-illegal-list)
       (:nfkd nfkd-illegal-list)
@@ -91,6 +89,7 @@
       (:nfkc nfkc-illegal-list))))
 
 (defun string-mapped-to-nothing (str)
+  "Reads a string and removes any character that should be mapped to nothing per RFC 3454 and RFC 4013."
   (let ((s1 (coerce str 'simple-vector))
         (lst nil)
         (skip nil))
@@ -104,6 +103,7 @@
     (format nil "~{~A~}" lst)))
 
 (defun string-mapped-to-space (str)
+  "Reads a string and converts any character which should be mapped to a space pre RFC 3454 and RFC 4013 to a space."
   (let ((s1 (coerce str 'simple-vector)))
     (loop for x across s1 counting x into y do
          (when (char-mapped-to-space-p x)
@@ -111,8 +111,7 @@
     (coerce s1 'string)))
 
 (defun saslprep-normalize (str &optional (form :nfkc))
-  "Scans string. If any character should be mapped to nothing, it eliminates that character. If any character is not printable ascii,
-it returns nil. If every character remaining after eliminations is printable ascii, it returns the printable-ascii string. "
+  "Scans string. If any character should be mapped to nothing, it eliminates that character. If any character is not printable ascii, it returns nil. If every character remaining after eliminations is printable ascii, it returns the printable-ascii string. "
   (when (string-printable-ascii-p str)
     (return-from saslprep-normalize str))
   (setf str (string-mapped-to-nothing str))
