@@ -1,7 +1,5 @@
 # saslprep
 
-Warning - Alpha level software. Normalize is not optimized and Saslprep is not complete
-
 This package provides a common lisp unicode normalization function using nfc, nfd, nfkc and nfkd as per Unicode Standard Annex #15 found at http://www.unicode.org/reports/tr15/tr15-22.html as well as saslprep and stringprep functions required by  https://tools.ietf.org/html/rfc5802as and
 found in:
 
@@ -33,7 +31,7 @@ Example with reference to relevant xkcd https://www.xkcd.com/936/
     "اstáplacha ceart ceallraí capall"
 ```
 
-# Saslprep Process
+# Saslprep Process Per RFC 4013 and RFC 3454
   * Map non-ascii space characters to space #x0020
   * Map commonly mapped to nothing
   * KC Normalization as described in Stringprep 4

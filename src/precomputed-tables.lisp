@@ -63,7 +63,7 @@
 
 
 (defun get-chars-mapped-to-nothing (&optional (form :char))
-  "Returns a list of characters commonly mapped to nothing per RFC . Default returns a list of charactershex strings. This can be changed
+  "Returns a list of characters commonly mapped to nothing per RFC 3454. Default returns a list of charactershex strings. This can be changed
 by passing in an optional parameter of either :hex-string (returning a list of strings of the hexadecimal representation of the code-point),
  :hex (an integer represented in hex) or :code-points (which will return a list of decimals representing the code-points)."
   (cond ((eq form :char)
@@ -151,6 +151,16 @@ by passing in an optional parameter of either :hex-string (returning a list of s
         ((eq form :code-points)
          '(65529 65530 65531 65532 65533))
         (t '())))
+
+(defun get-inappropriate-for-canonical-representation-char-p (&optional (form :char))
+  "Returns a list of characters considered inappropriate for canonical representation under RFC 3454 Table C.7. The parameter can be either a character, e.g. #\U+E001, a decimal code point e.g. 57345, a hex string  or an integer expressed in hex, e.g. #xE001"
+  (cond ((eq form :char)
+              '(#\U+2FF0 #\U+2FF1 #\U+2FF2 #\U+2FF3 #\U+2FF4 #\U+2FF5 #\U+2FF6 #\U+2FF7 #\U+2FF8 #\U+2FF9 #\U+2FFA #\U+2FFB))
+        ((eq form :code-points)
+         '(12272 12273 12274 12275 12276 12277 12278 12279 12280 12281 12282 12283))
+        ((eq form :hex-string
+              '("2FF0" "2FF1" "2FF2" "2FF3" "2FF4" "2FF5" "2FF6" "2FF7" "2FF8" "2FF9" "2FFA" "2FFB")))
+        (t nil)))
 
 (defun get-printable-ascii (&optional (form :char))
   "Returns a list of the printable ascii characters (32 to 126). This does not include extended ascii.

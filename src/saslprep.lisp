@@ -5,13 +5,15 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; external functions
-(defun normalize (str normalization-form)
+(defun normalize (str normalization-form &key (rfc 3454))
   "Base external function which calls the appropriate normalization for the normalization form."
-  (ecase normalization-form
-    (:nfd  (nfd str))
-    (:nfkd (nfkd str))
-    (:nfc  (nfc str))
-    (:nfkc (nfkc str))))
+  (if (= rfc 3454)
+      (ecase normalization-form
+           (:nfd  (nfd str))
+           (:nfkd (nfkd str))
+           (:nfc  (nfc str))
+           (:nfkc (nfkc str)))
+      (cerror "RFCs other than 3454 and 4013 not yet supported. Sorry" (format nil "~a" rfc))))
 
 (defun normalize-char (chr normalization-form)
   "Runs normalize on a single character input. You must provide the normalization form (:nfd, :nfkd, :nfc, or :nfkc)"
@@ -115,4 +117,31 @@ it returns nil. If every character remaining after eliminations is printable asc
     (return-from saslprep-normalize str))
   (setf str (string-mapped-to-nothing str))
   (setf str (string-mapped-to-space str))
-  (normalize str form))
+  (setf str (normalize str form))
+  (let ((bidirectional-check nil))
+    (loop for x across str do
+         (when (or (non-ascii-control-char-p x)
+                   (ascii-control-char-p x)
+                   (non-ascii-space-char-p x)
+                   (private-use-char-p x)
+                   (non-char-code-point-p x)
+                   (surrogate-code-points-p x)
+                   (inappropriate-for-plain-text-p x)
+                   (inappropriate-for-canonical-representation-char-p x)
+                   (change-display-property-char-p x)
+                   (tagging-char-p x))
+           (bad-char-error "prohibited output in string per RFC 4013" :value x))
+         (cond ((and (not bidirectional-check)
+                     (char-with-bidirectional-property-R-or-AL-p x))
+                (setf bidirectional-check "R"))
+               ((and (not bidirectional-check)
+                     (char-with-bidirectional-property-L-p x))
+                (setf bidirectional-check "L"))
+               ((and (equal bidirectional-check "L")
+                     (char-with-bidirectional-property-R-or-AL-p x))
+                (bad-char-error "Conflicting bidirectional characters in string" :value str))
+               ((and (equal bidirectional-check "R")
+                     (char-with-bidirectional-property-L-p x))
+                (bad-char-error "Conflicting bidirectional characters in string" :value str))
+               (t nil))))
+  str)
