@@ -158,8 +158,8 @@ by passing in an optional parameter of either :hex-string (returning a list of s
               '(#\U+2FF0 #\U+2FF1 #\U+2FF2 #\U+2FF3 #\U+2FF4 #\U+2FF5 #\U+2FF6 #\U+2FF7 #\U+2FF8 #\U+2FF9 #\U+2FFA #\U+2FFB))
         ((eq form :code-points)
          '(12272 12273 12274 12275 12276 12277 12278 12279 12280 12281 12282 12283))
-        ((eq form :hex-string
-              '("2FF0" "2FF1" "2FF2" "2FF3" "2FF4" "2FF5" "2FF6" "2FF7" "2FF8" "2FF9" "2FFA" "2FFB")))
+        ((eq form :hex-string)
+              '("2FF0" "2FF1" "2FF2" "2FF3" "2FF4" "2FF5" "2FF6" "2FF7" "2FF8" "2FF9" "2FFA" "2FFB"))
         (t nil)))
 
 (defun get-printable-ascii (&optional (form :char))

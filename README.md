@@ -31,6 +31,13 @@ Example with reference to relevant xkcd https://www.xkcd.com/936/
     "اstáplacha ceart ceallraí capall"
 ```
 
+# Implementation Notes
+This has been tested on sbcl, ccl, ecl
+
+ABCL does not like the character #\Soft_Hyphen
+Clisp failed to load split-sequence
+
+
 # Saslprep Process Per RFC 4013 and RFC 3454
   * Map non-ascii space characters to space #x0020
   * Map commonly mapped to nothing
