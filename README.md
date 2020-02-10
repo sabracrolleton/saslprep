@@ -1,6 +1,6 @@
 # saslprep
 
-This package provides a common lisp unicode normalization function using nfc, nfd, nfkc and nfkd as per Unicode Standard Annex #15 found at [http://www.unicode.org/reports/tr15/tr15-22.html](http://www.unicode.org/reports/tr15/tr15-22.html) as well as saslprep and stringprep functions required by  [https://tools.ietf.org/html/rfc5802](https://tools.ietf.org/html/rfc5802) and
+This package provides a common lisp implementation of unicode stringprep functions d Annex #15 found at [http://www.unicode.org/reports/tr15/tr15-22.html](http://www.unicode.org/reports/tr15/tr15-22.html) as well as saslprep and stringprep functions required by  [https://tools.ietf.org/html/rfc5802](https://tools.ietf.org/html/rfc5802) and
 found in:
 
   * [https://tools.ietf.org/html/rfc4013](https://tools.ietf.org/html/rfc4013) (2005) SASLprep
@@ -9,30 +9,11 @@ found in:
 This is a fork of a subset of work done by Takeru Ohta in 2010. Future work is intended to provide support for:
 
 # Implementation Notes
-This has been tested on sbcl, ccl, ecl against the unicode test file found at [http://www.unicode.org/Public/UNIDATA/NormalizationTest.txt](http://www.unicode.org/Public/UNIDATA/NormalizationTest.txt)
-
-Testing currently shows about a 8% failure rate on ABCL and Allegro. Further work needs to be done to determine the cause.
 
 # Usage
-It has two major exported functions:
+It has one major exported function:
 
-  * (normalize (str unicode-normalization-method))
   * (saslprep-normalize (str)
-
-The currently supported normalization methods are :nfc :nfkc :nfd :nfkd
-
-Normalization example with reference to relevant xkcd [https://www.xkcd.com/936/](https://www.xkcd.com/936/)
-
-```common-lisp
-    (normalize "正しい馬バッテリーステープル" :nfkc)
-    "正しい馬バッテリーステープル"
-
-    (normalize "الحصان الصحيح البطارية التيلة" :nfkc)
-    "الحصان الصحيح البطارية التيلة"
-
-    (normalize "اstáplacha ceart ceallraí capall" :nfkc)
-    "اstáplacha ceart ceallraí capall"
-```
 
 Saslprep-normalize example
 ```common-lisp
@@ -67,7 +48,6 @@ Explanation of what saslprep-normalize adds to the process RFC 4013 and RFC 3454
   * All the things I do not understand yet
   * Optimization?
 
-More relevant xkcd [https://xkcd.com/1726/](https://xkcd.com/1726/), [https://xkcd.com/1953/](https://xkcd.com/1953/), [https://www.xkcd.com/1209/](https://www.xkcd.com/1209/), [https://xkcd.com/1137/](https://xkcd.com/1137/)
 
 # Data Files
   * UnicodeData.txt was downloaded from [http://www.unicode.org/Public/UNIDATA/UnicodeData.txt](http://www.unicode.org/Public/UNIDATA/UnicodeData.txt)

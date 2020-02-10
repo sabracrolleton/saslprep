@@ -58,9 +58,3 @@
     (loop for x in lst counting x into y do
          (setf (aref arry (- y 1)) (code-char x)))
     (coerce arry 'string)))
-
-; (defparameter *client-encoding* "UNICODE")
-
-; (defun string-to-octets (str)  (babel:string-to-octets str))
-
-; (defun octets-to-string (oct)  (babel:octets-to-string oct))

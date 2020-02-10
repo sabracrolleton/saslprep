@@ -2,14 +2,7 @@
 
 (defpackage :saslprep
   (:use :common-lisp)
-  (:export #:normalize
-           #:saslprep-normalize
-           #:get-mapping
-           #:get-illegal-char-list
-           #:get-canonical-combining-class-map
-           #:parse-hex-string-to-char
-           #:parse-hex-string-to-string
-           #:parse-hex-list-to-string
+  (:export #:saslprep-normalize
            #:char-mapped-to-nothing-p
            #:char-mapped-to-space-p
            #:non-char-code-point-p
