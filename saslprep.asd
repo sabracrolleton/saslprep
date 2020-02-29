@@ -15,16 +15,16 @@
   ((:module "src"
             :components ((:file "package")
                          (:file "utilities" :depends-on ("package"))
-                         (:file "precomputed-tables" :depends-on ("package" "utilities"))
-                         (:file "saslprep-backend" :depends-on ("package" "utilities" "precomputed-tables"))
+                         (:file "saslprep-backend" :depends-on ("package" "utilities"))
                          (:file "saslprep" :depends-on ("package" "utilities" "saslprep-backend")))))
   :in-order-to ((test-op (test-op "t/tests"))))
 
 (defsystem "saslprep/tests"
-  :depends-on ("saslprep" "fiveam" "uiop" "cl-ppcre" "split-sequence")
+  :depends-on ("saslprep" "fiveam" "uiop" "cl-ppcre" "split-sequence" "alexandria")
   :components
   ((:module "t"
             :components ((:file "test-package")
-                         (:file "tests"))))
+                         (:file "precomputed-tables" :depends-on ("test-package"))
+                         (:file "tests" :depends-on ("test-package" "precomputed-tables")))))
   :perform (test-op (o c)
              (uiop:symbol-call :fiveam '#:run! :saslprep)))

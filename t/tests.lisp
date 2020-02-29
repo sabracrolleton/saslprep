@@ -3,50 +3,155 @@
 
 (fiveam:def-suite :saslprep
     :description "Test suite for saslprep")
+
 (fiveam:in-suite :saslprep)
-
-(defun parse-hex-string-to-string (str)
-  "Takes a string which may be one or more hex numbers e.g. '0044 0307', builds an array of characters, coerces to string and returns the string. Mostly used for testing."
-  (let* ((split-str (split-sequence:split-sequence #\Space str :remove-empty-subseqs t))
-         (arry (make-array (length split-str))))
-    (loop for x in split-str counting x into y do
-         (setf (aref arry (- y 1)) (parse-hex-string-to-char x)))
-    (coerce arry 'string)))
-
-(defun parse-hex-string-to-int (str)
-  "Parse a string which is a single character in hex to a decimal."
-  (parse-integer str :radix 16))
-
-(defun parse-hex-string-to-char (str)
-  "Parse a hex string which is a single character into a character using code-char."
-  (code-char (parse-hex-string-to-int str)))
-
-(defun int-to-hex-string (int)
-  (write-to-string int :base 16))
-
-(defun parse-hex-list-to-string (lst)
-  "Takes a list of numbers and returns a string of characters"
-  (let ((arry (make-array (length lst))))
-    (loop for x in lst counting x into y do
-         (setf (aref arry (- y 1)) (code-char x)))
-    (coerce arry 'string)))
-
-(defun str-to-arry (str)
-  (let ((arry (make-array (length str))))
-    (loop for x across arry counting x into y do
-         (setf (aref arry (- y 1)) (schar str (- y 1))))))
-
-
-(defun hs-to-cs (str)
-  "Syntactic sugar"
-  (parse-hex-string-to-string str))
 
 (defparameter *test-directory* (uiop:merge-pathnames*
                                 (make-pathname :directory (list :relative "t") :name nil :type nil)
                                 (asdf:system-source-directory (asdf:find-system 'saslprep nil))))
 
-(defun read-test-data (fname)
-  (with-open-file (in (uiop:merge-pathnames* *test-directory* fname))
-    (loop for line = (read-line in nil nil)
-       while line
-       collect (cl-ppcre:split ";" line))))
+(test chars-mapped-to-nothing
+  (let ((arry (make-array 3 :initial-contents "ABC")))
+    (loop for x in (get-chars-mapped-to-nothing) do
+         (let ((str ""))
+           (setf (aref arry 1) x)
+           (setf str (coerce arry 'string))
+           (is (equal "AC" (string-mapped-to-nothing str)))))))
+
+(test chars-mapped-to-space
+  (let ((arry (make-array 3 :initial-contents "ABC")))
+    (loop for x in (get-chars-mapped-to-space) do
+         (let ((str ""))
+           (setf (aref arry 1) x)
+           (setf str (coerce arry 'string))
+           (is (equal "A C" (string-mapped-to-space str)))))))
+
+(test ascii-control-chars
+  (loop for x in (get-ascii-control-chars) do
+       (is (ascii-control-char-p x))))
+
+(test non-ascii-control-chars
+  (loop for x in (get-non-ascii-control-chars) do
+       (is (non-ascii-control-char-p x))))
+
+(test non-ascii-space-chars
+  (loop for x in (get-non-ascii-space-chars) do
+       (is (non-ascii-space-char-p x))))
+
+(test private-use-char
+  (loop for x in (get-private-use-chars) do
+       (is (private-use-char-p x))))
+
+(test non-char-code-point
+  (loop for x in (get-non-char-code-points) do
+       (is (non-char-code-point-p x))))
+
+(test surrogate-code-point
+  (loop for x in (get-surrogate-code-points) do
+       (is (surrogate-code-point-p x))))
+
+(test inappropriate-for-plain-text
+  (loop for x in (get-inappropriate-for-plain-text-chars) do
+       (is (inappropriate-for-plain-text-char-p x))))
+
+(test inappropriate-for-canonical-representation-char
+  (loop for x in (get-inappropriate-for-canonical-representation-chars) do
+       (is (inappropriate-for-canonical-representation-char-p x))))
+
+(test change-display-property-char
+  (loop for x in (get-change-display-property-chars) do
+       (is (change-display-property-char-p x))))
+
+(test tagging-chars
+  (loop for x in (get-tagging-chars) do
+       (is (tagging-char-p x))))
+
+(test char-with-bidirectional-property-R-or-AL
+  (loop for x in (get-bidirectional-property-R-or-AL-chars) do
+       (is (char-with-bidirectional-property-r-or-al-p x))))
+
+(test char-with-bidirectional-property-L
+  (loop for x in (get-bidirectional-property-L-chars) do
+       (is (char-with-bidirectional-property-l-p x))))
+
+(defun set-arry ()
+  (let ((arry (make-array 5)))
+    (setf (aref arry 0) #\A)
+    (setf (aref arry 1) #\B)
+    (setf (aref arry 2) #\C)
+    (setf (aref arry 3) #\D)
+    (setf (aref arry 4) #\E)
+    arry))
+
+(test saslprep-normalize
+  (let ((arry (set-arry)))
+    (loop for x in (get-chars-mapped-to-nothing) do
+         (setf (aref arry 3) x)
+         (is (equal (saslprep-normalize (coerce arry 'string)) "ABCE")))
+    (setf arry (set-arry))
+    (loop for x in (get-chars-mapped-to-space) do
+         (setf (aref arry 3) x)
+         (if (equal (char-code x) 8203) ; NEED TO DEAL WITH ZERO_WIDTH_SPACE
+             (is (equal (saslprep-normalize (coerce arry 'string)) "ABCE"))
+             (is (equal (saslprep-normalize (coerce arry 'string)) "ABC E"))))
+    (setf arry (set-arry))
+    (loop for x in (get-ascii-control-chars) do
+         (setf (aref arry 3) x)
+         (signals error (saslprep-normalize (coerce arry 'string))))))
+
+(test saslprep-normalize-non-ascii-control
+  "Note that normalization removes the zero width and word joiner control characters, so they no longer exist to signal an error"
+  (let ((arry (set-arry)))
+    (loop for x in (set-difference (get-non-ascii-control-chars) (get-chars-mapped-to-nothing)) do
+         (setf (aref arry 3) x)
+         (signals error (saslprep-normalize (coerce arry 'string))))))
+
+(test saslprep-normalize-private-use
+  (let ((arry (set-arry)))
+    (loop for x in (get-private-use-chars) do
+         (setf (aref arry 3) x)
+         (signals error (saslprep-normalize (coerce arry 'string))))))
+
+(test saslprep-normalize-non-char-code-point
+  (let ((arry (set-arry)))
+    (loop for x in (get-non-char-code-points) do
+         (setf (aref arry 3) x)
+         (signals error (saslprep-normalize (coerce arry 'string))))))
+
+(test saslprep-normalize-surrogate-code-points
+  (let ((arry (set-arry)))
+    (loop for x in (get-surrogate-code-points) do
+         (setf (aref arry 3) x)
+         (signals error (saslprep-normalize (coerce arry 'string))))))
+
+(test saslprep-normalize-inappropriate-for-plain-text-chars
+  (let ((arry (set-arry)))
+    (loop for x in (get-inappropriate-for-plain-text-chars) do
+         (setf (aref arry 3) x)
+         (signals error (saslprep-normalize (coerce arry 'string))))))
+
+(test saslprep-normalize-inappropriate-for-canonical-representation-chars
+  (let ((arry (set-arry)))
+    (loop for x in (get-inappropriate-for-canonical-representation-chars) do
+         (setf (aref arry 3) x)
+         (signals error (saslprep-normalize (coerce arry 'string))))))
+
+(test saslprep-normalize-change-display-property-chars
+  "note that normalization removes the #\COMBINING_ACUTE_TONE_MARK and #\COMBINING_GRAVE_TONE_MARK"
+  (let ((arry (set-arry)))
+    (loop for x in (get-change-display-property-chars) do
+         (setf (aref arry 3) x)
+         (unless (member x '(#\COMBINING_ACUTE_TONE_MARK #\COMBINING_GRAVE_TONE_MARK))
+           (signals error (saslprep-normalize (coerce arry 'string)))))))
+
+(test saslprep-normalize-tagging-chars
+  (let ((arry (set-arry)))
+    (loop for x in (get-tagging-chars) do
+         (setf (aref arry 3) x)
+         (signals error (saslprep-normalize (coerce arry 'string))))))
+
+(test saslprep-normalize-bidirectional-errors
+  (let ((arry (set-arry)))
+         (setf (aref arry 1) (elt (get-bidirectional-property-R-or-AL-chars) (random (length (get-bidirectional-property-R-or-AL-chars)))))
+         (setf (aref arry 3) (elt (get-bidirectional-property-L-chars) (random (length (get-bidirectional-property-L-chars)))))
+         (signals error (saslprep-normalize (coerce arry 'string)))))
